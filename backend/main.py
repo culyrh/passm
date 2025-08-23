@@ -88,25 +88,36 @@ async def recognize_face(file: UploadFile = File(...)):
                 # 가장 유사한 얼굴 찾기
                 best_match_index = np.argmin(distances)
                 confidence = 1 - distances[best_match_index]  # 신뢰도 계산
+                actual_confidence = round(confidence * 100, 2)
                 
-                if matches[best_match_index] and confidence > 0.6:  # 신뢰도 60% 이상
+                if matches[best_match_index] and confidence > 0.5:  # 신뢰도 50% 이상
                     celebrity_name = known_face_names[best_match_index]
                     results.append({
                         "celebrity": celebrity_name,
-                        "confidence": round(confidence * 100, 2),
-                        "recognized": True
+                        "confidence": actual_confidence,
+                        "recognized": True,
+                        "actual_confidence": actual_confidence,
+                        "threshold": 50.0
                     })
                 else:
+                    # 인식 실패해도 실제 신뢰도 표시
+                    best_celebrity = known_face_names[best_match_index] if matches[best_match_index] else "매칭없음"
                     results.append({
                         "celebrity": "알 수 없음",
                         "confidence": 0,
-                        "recognized": False
+                        "recognized": False,
+                        "actual_confidence": actual_confidence,
+                        "best_match": best_celebrity,
+                        "threshold": 50.0,
+                        "reason": f"신뢰도 {actual_confidence}%가 임계값 50%보다 낮음"
                     })
             else:
                 results.append({
                     "celebrity": "알 수 없음", 
                     "confidence": 0,
-                    "recognized": False
+                    "recognized": False,
+                    "actual_confidence": 0,
+                    "reason": "매칭되는 얼굴이 없음"
                 })
         
         return {
