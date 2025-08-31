@@ -1,8 +1,21 @@
 
 backend/venv/
 backend/__pycache__/
+backend/logs/
+backend/face_recognition/data
 backend/data/celebrities/
+backend/yolo-access/logs
+backend/yolo-access/data/
+backend/yolo-access/yolov8n.pt
+
 mobile/node_modules/
 *.pyc
 .env
 .vscode/
+
+/logs
+.pkl
+yarn.lock
+
+tempApp
+mobile

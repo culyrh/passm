@@ -4,3 +4,5 @@ data/celebrities/
 *.pyc
 .env
 .vscode/
+
+/logs
